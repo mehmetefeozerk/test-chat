@@ -3,7 +3,7 @@ const http = require('http');
 const WebSocket = require('ws');
 
 const app = express();
-const port = 80;
+const port = 8080;
 
 app.use(express.static('public'));
 
@@ -53,5 +53,5 @@ function gonderClients(data) {
 
 // Start the server
 server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on ${port}`);
 });
