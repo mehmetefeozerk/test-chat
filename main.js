@@ -36,6 +36,7 @@ wss.on('connection', (ws) => {
 
         if (message.type === 'set_nickname') {
             ws.nickname = message.nickname;
+        gonderClients({ type: 'sunucu_giris', nickname: ws.nickname });
             console.log(`Client set nickname: ${ws.nickname}`);
         } else if (message.type === 'mesaj') {
             console.log(`${message.name}: ${message.message}`);
@@ -57,6 +58,7 @@ wss.on('connection', (ws) => {
     ws.on('close', () => {
         console.log('WebSocket connection closed');
         gonderClients({ type: 'sunucu_sayi', count: getClientSayisi() });
+        gonderClients({ type: 'disconnect_sunucu', nickname: ws.nickname });
     });
 
     ws.on('error', (error) => {
