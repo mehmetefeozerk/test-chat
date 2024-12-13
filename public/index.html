@@ -21,9 +21,11 @@
     body{
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 10px;
         width: 100%;
         height: 100%;
+        background-color: rgba(8, 71, 153,0.5);
+        overflow: hidden;
     }
     *{
         box-sizing: border-box;
@@ -49,19 +51,19 @@
   background: #555;  
 }
 
-  /* Mesaj kapsayıcısı */
 .message-container {
     width: 80%;
-    height: 95%;
-    max-height: 90vh;
-    background-color: #f4f6f9;
+    height: 100%;
+    max-height: 92vh;
+    background-color: #dae3f0;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-sizing: border-box;
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
     border: 2px solid gray;
     overflow-y: auto;
 }
@@ -75,7 +77,6 @@
     overflow-y: auto;
 }
 
-/* Mesaj stili */
 .message {
     border-radius: 8px;
     padding: 12px;
@@ -93,7 +94,6 @@
     box-shadow: 0px 0px 5px darkgray;
 }
 
-/* Gönderen mesaj */
 .sender {
     background-color: #e1f5fe;
     border-left: 4px solid #039be5;
@@ -120,6 +120,7 @@
 .sender .message-text {
     color: #0277bd;
     font-size: 1em;
+    font-weight: 500;
     line-height: 1;
     margin: 5px;
 }
@@ -172,8 +173,9 @@
     align-items: center; 
     position: relative;
     height: 2.5rem;
-    background-color: darkgray;
+    background-color: #074799;
     padding: 10px;
+    color: white;
     font-family: Montserrat;
     border-bottom:2px solid black;
 }
@@ -182,7 +184,7 @@
     margin: 0; 
     position: absolute;
     left: 0;
-    background-color: gray;
+    background-color: #001A6E;
     color: white;
     font-weight: bold;
     height: 100%;
@@ -198,7 +200,7 @@
     margin: 0; 
     position: absolute;
     right: 0;
-    background-color: gray;
+    background-color: #001A6E;
     color: white;
     font-weight: bold;
     height: 100%;
@@ -223,13 +225,12 @@
     justify-content: space-between;
     height: 100%;
     width: 100%;
-    gap: 5px;
+    padding-bottom: 3px;
 }
-/* #inputs div için stil */
 #inputs {
     width: 20%;
     height: 95%;
-    background-color: #fff;
+    background-color: #dae3f0;
     padding: 10px;
     padding-top:5px;
     border-radius: 8px;
@@ -238,6 +239,11 @@
     gap: 20px;
     border-radius: 12px;
     border:2px solid gray;
+}
+
+#inputs input{
+    outline: none;
+    border:2px solid gray !important;
 }
 
 #emoji-picker {
@@ -393,6 +399,8 @@
 }
 .mesaj-div button{
     width: 10%;
+    min-width: 35px;
+    min-height: 26px;
     padding: 5px;
     height: 100%;
     outline: none;
@@ -406,6 +414,29 @@
     border: 2px solid black;
     box-sizing: border-box;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    min-height: 26px;
+    font-size: 0.8rem;
+}
+.bildiri{
+    background-color: rgba(255, 0, 0, 0.5);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-family: Montserrat;
+    font-size: 0.7rem;
+    height: 1.5rem;
+    width: 100%;
+    margin-bottom: 10px;
+}
+header{
+    min-height:30px;
 }
 </style>
 </body>
@@ -475,7 +506,7 @@ if(message.type == 'mesaj'){
             <div class="message receiver">
                 <div class="message-header">
                     <span class="name">${message.name}</span>
-                    <span class="time">${new Date().toLocaleTimeString()}</span>
+                    <span class="time">${new Date().toLocaleTimeString('tr-TR', { hour12: true, hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
                 <p class="message-text">${message.message}</p>
             </div>
@@ -488,6 +519,14 @@ if(message.type == 'mesaj'){
 if(message.type == 'sunucu_sayi'){
     console.log(message.count);
     $('#sunucu_sayi').text(message.count);
+}
+if(message.type=='disconnect_sunucu'){
+    const disconnectMesaj = `<div class="bildiri">${message.nickname} Sunucudan Ayrıldı</div>`;
+    messageContainer.append(disconnectMesaj);
+}
+if(message.type=='sunucu_giris'){
+    const girisMesaj = `<div class="bildiri" style='background-color:rgba(0,255,0,0.5);'>${message.nickname} Sunucuya Katıldı</div>`;
+    messageContainer.append(girisMesaj);
 }
 };
 
@@ -546,6 +585,8 @@ function isimBelirle(){
     $('#main').css('padding','0');
     $('#inputs').css('display','none');
     $('.message-container').css('width','100%');
+    $('#oturum_name_div').css('display','flex');
+    $('#sunucu_div').css('display','flex');
     gonder({type:'set_nickname', nickname:$('#name').val()});
     if($('#name').val().toLowerCase() == 'hatice'){
         location.reload();
@@ -576,6 +617,8 @@ if(!oturum_name){
     $('#inputs').css('width','100%');
     $('.message-container').css('display','none');
     $('#main').css('padding','5px');
+    $('#oturum_name_div').css('display','none');
+    $('#sunucu_div').css('display','none');
 }else{
     $('#inputs').css('display','none');
     $('.message-container').css('width','100%');
@@ -591,15 +634,15 @@ if(!oturum_name){
             text: 'Birtanem Gelmiş Hoşgelmişş.',
             showConfirmButton: true,
             confirmButtonText: 'Devam et',
-            timer: 4000,  
+            timer: 2000,  
         });
     
 var love = setInterval(function() {
-    var r_num = Math.floor(Math.random() * 40) + 1;
-    var r_size = Math.floor(Math.random() * 65) + 10;
+    var r_num = Math.floor(Math.random() * 20) + 1;
+    var r_size = Math.floor(Math.random() * 15) + 10;
     var r_left = Math.floor(Math.random() * 100) + 1;
-    var r_bg = Math.floor(Math.random() * 25) + 100;
-    var r_time = Math.floor(Math.random() * 15) + 10;
+    var r_bg = Math.floor(Math.random() * 15) + 100;
+    var r_time = 200;
 
     $('#main').append("<div class='heart' style='width:" + r_size + "px;height:" + r_size + "px;left:" + r_left + "%;background:rgba(255," + (r_bg - 25) + "," + r_bg + ",1);-webkit-animation:love " + r_time + "s ease;-moz-animation:love " + r_time + "s ease;-ms-animation:love " + r_time + "s ease;animation:love " + r_time + "s ease'></div>");
 
@@ -614,11 +657,7 @@ var love = setInterval(function() {
     });
 }, 1000);
 $('body').css('overflow','hidden');
-$('#inputs').css('background-color','rgba(255,255,255,0.7)');
 $('.message-container').css('background-color','rgba(255,255,255,0.7)');
-$('#baslik').css('background-color','pink');
-$('#sunucu_div').css('background-color','purple');
-$('#oturum_name_div').css('background-color','purple');
     }
 }
 
