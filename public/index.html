@@ -188,6 +188,9 @@
     display: flex;
     padding: 0px 10px;
     align-items: center;
+    max-width: 20rem;
+    white-space: pre;
+    overflow: hidden;
 }
 
 #baslik #sunucu_div {
@@ -202,6 +205,7 @@
     padding: 0px 10px;
     align-items: center;
     white-space: pre;
+    max-width: 20rem;
 }
 
 #baslik h1 {
@@ -357,7 +361,7 @@
   0%{top:110%}
 }
 
-@media (max-width: 500px) {
+@media (max-width: 900px) {
 #baslik h1{
     display: none;
 }
@@ -365,10 +369,11 @@
     font-size: 0.8rem !important;
 }
 #baslik{
-    font-size: 0.7rem;
+    font-size: 0.8rem;
 }
+
 #isim_sil{
-    font-size:0.6rem;
+    font-size: min(2vw,0.8rem);
 }
 
 }
@@ -428,7 +433,12 @@
 </div>
 
     <script>
-const ws = new WebSocket('wss://'+window.location.hostname+':443');
+    var ws = null;
+        if(window.location.protocol === 'https:'){
+ws = new WebSocket('wss://'+window.location.hostname+':8080');
+}else{
+ws = new WebSocket('ws://'+window.location.hostname+':8080');
+}
 ws.onopen = function () {
 };
 
@@ -520,6 +530,9 @@ function isimBelirle(){
     $(".mesaj-div").each(function() { $(this).css({"display": "flex" });});
     $('#isim_sil').css('display','block');
     $('#oturum_name').text($('#name').val());
+    $('#inputs').css('width','20%');
+    $('.message-container').css('display','flex');
+    $('#main').css('padding','0');
     if($('#name').val().toLowerCase() == 'hatice'){
         location.reload();
     }
@@ -544,6 +557,9 @@ if(!oturum_name){
     $('#isim_div').css('display','flex');
     $('#isim_sil').css('display','none');
     $(".mesaj-div").each(function() { $(this).css({"display": "none", });});
+    $('#inputs').css('width','100%');
+    $('.message-container').css('display','none');
+    $('#main').css('padding','5px');
 }else{
     $(".mesaj-div").each(function() { $(this).css({"display": "flex", });});
     $('#isim_sil').css('display','block');
