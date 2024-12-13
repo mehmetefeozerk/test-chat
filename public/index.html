@@ -435,9 +435,9 @@
     <script>
     var ws = null;
         if(window.location.protocol === 'https:'){
-ws = new WebSocket('wss://'+window.location.hostname+':8080');
+ws = new WebSocket('wss://'+window.location.hostname);
 }else{
-ws = new WebSocket('ws://'+window.location.hostname+':8080');
+ws = new WebSocket('ws://'+window.location.hostname);
 }
 ws.onopen = function () {
 };
