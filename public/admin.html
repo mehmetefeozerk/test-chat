@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: 20px auto; padding: 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 5px; }
+        h1 { text-align: center; color: #555; }
+        button { padding: 10px 15px; margin: 5px; background-color: #007BFF; color: #fff; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 10px 0; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 3px; }
+        .nickname { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <button id="refresh">İstemcileri Yenile</button>
+        <ul id="client-list"></ul>
+    </div>
+    <script>
+        let ws = new WebSocket(window.location.protocol === 'https:' ? 'wss://' + window.location.hostname : 'ws://' + window.location.hostname);
+
+        ws.onopen = function () {
+            console.log('web socket bağlandı');
+            refreshClients();
+        };
+
+        ws.onmessage = function (event) {
+            const message = JSON.parse(event.data);
+
+            if (message.type === 'client_list') {
+                const clientList = document.getElementById('client-list');
+                clientList.innerHTML = '';
+                message.clients.forEach(nickname => {
+                    const li = document.createElement('li');
+                    li.style.cssText='display:flex; justify-content:space-between; align-items:center; padding:0px 5px;';
+                    li.innerHTML = `<span class="nickname">${nickname}</span> <button onclick="disconnectClient('${nickname}')">Sunucudan At</button>`;
+                    clientList.appendChild(li);
+                });
+            }
+        };
+
+        function refreshClients() {
+            ws.send(JSON.stringify({ type: 'admin', command: 'get_clients' }));
+        }
+
+        function disconnectClient(nickname) {
+            ws.send(JSON.stringify({ type: 'admin', command: 'disconnect_client', nickname }));
+            refreshClients();
+        }
+
+        document.getElementById('refresh').addEventListener('click', refreshClients);
+    </script>
+</body>
+</html>
