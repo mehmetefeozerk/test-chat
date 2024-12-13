@@ -3,7 +3,7 @@ const http = require('http');
 const WebSocket = require('ws');
 
 const app = express();
-const port = 443;
+const port = 8080;
 
 app.use(express.static('public'));
 
