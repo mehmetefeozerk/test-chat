@@ -233,7 +233,7 @@
 }
 #inputs {
     width: 20%;
-    height: 95%;
+    height: 100%;
     background-color: #dae3f0;
     padding: 10px;
     padding-top:5px;
@@ -593,6 +593,9 @@ function isimBelirle(){
     $('.message-container').css('width','100%');
     $('#oturum_name_div').css('display','flex');
     $('#sunucu_div').css('display','flex');
+    if(window.innerWidth < 900){
+    $('#baslik h1').css('display','none');
+}
     gonder({type:'set_nickname', nickname:$('#name').val()});
     if($('#name').val().toLowerCase() == 'hatice'){
         location.reload();
@@ -625,6 +628,9 @@ if(!oturum_name){
     $('#main').css('padding','5px');
     $('#oturum_name_div').css('display','none');
     $('#sunucu_div').css('display','none');
+    if(window.innerWidth < 900){
+    $('#baslik h1').css('display','block');
+}
 }else{
     $('#inputs').css('display','none');
     $('.message-container').css('width','100%');
@@ -709,7 +715,13 @@ window.onscroll = function() {
   document.body.scrollTop = 0;  
   document.documentElement.scrollTop = 0;
 };
-
+window.onresize = function() {
+if(window.innerWidth > 900){
+    $('#baslik h1').css('display','block');
+}else if(localStorage.getItem("oturum_name")){
+    $('#baslik h1').css('display','none');
+}
+};
 
 toastr.options = {
       "closeButton": true,
