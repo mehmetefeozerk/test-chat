@@ -53,8 +53,8 @@
 
 .message-container {
     width: 80%;
-    height: 100%;
-    max-height: 92vh;
+    height: 90vh;
+    min-height: 100%;
     background-color: #dae3f0;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -95,64 +95,68 @@
 }
 
 .sender {
-    background-color: #e1f5fe;
-    border-left: 4px solid #039be5;
+    background-color: #005c4b;
+    border-left: 4px solid rgba(255, 255, 255, 0.2);
     align-self: flex-end;
 }
 
 .sender .message-header {
-    display: flex;
+    display: flex; 
     justify-content: space-between;
-    margin-bottom: 8px;
+    font-size: 14px; 
+    margin-bottom: 12px;
 }
 
 .sender .name {
     font-weight: bold;
-    color: #0277bd;
     margin-right: 5px;
+    color: white;
 }
 
 .sender .time {
-    color: #0277bd;
-    font-size: 0.9em;
+    color: rgb(200, 200, 200);
+    font-size: 0.9em;;
 }
 
 .sender .message-text {
-    color: #0277bd;
-    font-size: 1em;
+    color: white;
+    font-size: 0.85rem;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1em;
     margin: 5px;
 }
 
-/* Alıcının mesajı */
 .receiver {
-    background-color: #fff3e0;
-    border-left: 4px solid #ffb74d;
+    background-color: rgb(42, 54, 61);
+    border-left: 4px solid rgba(255, 255, 255, 0.2);
     align-self: flex-start;
+    color: white;
 }
 
 .receiver .message-header {
-    display: flex;
+    display: flex; 
     justify-content: space-between;
-    margin-bottom: 8px;
+    font-size: 14px; 
+    margin-bottom: 12px;
 }
 
 .receiver .name {
     font-weight: bold;
-    color: #f57c00;
+    margin-right: 5px;
+    color: white;
 }
 
 .receiver .time {
-    color: #f57c00;
+    color: rgb(200, 200, 200);
     font-size: 0.9em;
 }
 
 .receiver .message-text {
-    color: #f57c00;
-    font-size: 1em;
-    line-height: 1;
-    margin:5px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1em;
+    margin: 5px;
 }
 
 .message-header span {
@@ -244,6 +248,8 @@
 #inputs input{
     outline: none;
     border:2px solid gray !important;
+    height: 50%;
+    min-height: 2rem;
 }
 
 #emoji-picker {
@@ -264,7 +270,6 @@
 
 #isim_div input {
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
     width: 100%;
@@ -448,6 +453,7 @@ header{
     <div id="main">
         <div id="inputs">
     <div id="isim_div">
+        <p style="margin:0; margin-top:5px; font-family:Montserrat">İsminizi Girerek Sohbete Girin</p>
     <input type="text" id="name" placeholder="İsim...">
     <button onclick="isimBelirle()">Oturum Aç</button>
     </div>
@@ -698,6 +704,11 @@ $(document).ready(function() {
 });
 
 });
+
+window.onscroll = function() {
+  document.body.scrollTop = 0;  
+  document.documentElement.scrollTop = 0;
+};
 
 
 toastr.options = {
